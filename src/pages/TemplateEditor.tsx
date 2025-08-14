@@ -329,66 +329,117 @@ const TemplateEditor = () => {
     if (!selectedTemplate) return;
 
     try {
+      // Create canvas based on the canvas container size
+      const canvasElement = canvasRef.current;
+      if (!canvasElement) return;
+      
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
+      // Set canvas size
+      canvas.width = 800;
+      canvas.height = 600;
 
-        ctx.drawImage(img, 0, 0);
+      // Fill background
+      if (canvasBackgroundType === 'color') {
+        ctx.fillStyle = canvasBackground;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else {
+        // Handle background image
+        try {
+          const bgImg = new Image();
+          bgImg.crossOrigin = 'anonymous';
+          await new Promise((resolve, reject) => {
+            bgImg.onload = resolve;
+            bgImg.onerror = reject;
+            bgImg.src = canvasBackground;
+          });
+          ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        } catch (error) {
+          console.warn('Background image failed to load, using white background');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+      }
 
-        if (selectedTemplate.type === 'preset') {
+      if (selectedTemplate.type === 'preset' && selectedTemplate.image) {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+            img.src = selectedTemplate.image;
+          });
+          
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          // Add text overlays for preset templates
           ctx.font = 'bold 40px Arial';
           ctx.fillStyle = 'white';
           ctx.strokeStyle = 'black';
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 3;
           ctx.textAlign = 'center';
 
           selectedTemplate.texts.forEach((text, index) => {
             if (text) {
-              const y = index === 0 ? 50 : canvas.height - 30;
+              const y = index === 0 ? 60 : canvas.height - 40;
               ctx.strokeText(text, canvas.width / 2, y);
               ctx.fillText(text, canvas.width / 2, y);
             }
           });
-        } else {
-          customElements.forEach(el => {
-            if (el.type === 'text') {
-              ctx.font = `${el.fontWeight || 'bold'} ${el.fontSize || 24}px Arial`;
-              ctx.fillStyle = el.color || 'white';
-              ctx.textAlign = 'left';
-              ctx.fillText(el.content, el.x, el.y);
-            } else if (el.type === 'image' && el.content) {
+        } catch (error) {
+          console.warn('Template image failed to load');
+        }
+      } else {
+        // Handle custom elements
+        for (const el of customElements) {
+          if (el.type === 'text' && el.content) {
+            ctx.font = `${el.fontWeight || 'bold'} ${el.fontSize || 24}px Arial`;
+            ctx.fillStyle = el.color || 'white';
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.textAlign = 'left';
+            
+            // Add text stroke for better visibility
+            ctx.strokeText(el.content, el.x, el.y + (el.fontSize || 24));
+            ctx.fillText(el.content, el.x, el.y + (el.fontSize || 24));
+          } else if (el.type === 'image' && el.content) {
+            try {
               const imageEl = new Image();
-              imageEl.src = el.content;
+              imageEl.crossOrigin = 'anonymous';
+              await new Promise((resolve, reject) => {
+                imageEl.onload = resolve;
+                imageEl.onerror = reject;
+                imageEl.src = el.content;
+              });
               ctx.drawImage(imageEl, el.x, el.y, el.width || 100, el.height || 100);
+            } catch (error) {
+              console.warn(`Image element failed to load: ${el.content}`);
             }
+          }
+        }
+      }
+
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `meme-${Date.now()}.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "Download successful!",
+            description: "Your meme has been downloaded."
           });
         }
-
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `meme-${Date.now()}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            toast({
-              title: "Download successful!",
-              description: "Your meme has been downloaded."
-            });
-          }
-        }, 'image/png');
-      };
-      img.src = selectedTemplate.image;
+      }, 'image/png');
     } catch (error) {
       console.error('Download error:', error);
       toast({
@@ -401,18 +452,40 @@ const TemplateEditor = () => {
 
   const handleShare = async () => {
     try {
-      if (navigator.share) {
-        await navigator.share({
+      if (navigator.share && navigator.canShare) {
+        // Try Web Share API first
+        const shareData = {
           title: 'Check out this meme!',
           text: 'I created this awesome meme!',
           url: window.location.href,
-        });
+        };
+        
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          toast({
+            title: "Shared successfully!",
+            description: "Your meme has been shared."
+          });
+          return;
+        }
+      }
+      
+      // Fallback to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
         toast({
-          title: "Shared successfully!",
-          description: "Your meme has been shared."
+          title: "Link copied!",
+          description: "Meme link copied to clipboard. Share it anywhere!"
         });
       } else {
-        await navigator.clipboard.writeText(window.location.href);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = window.location.href;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
         toast({
           title: "Link copied!",
           description: "Meme link copied to clipboard. Share it anywhere!"
@@ -420,11 +493,27 @@ const TemplateEditor = () => {
       }
     } catch (error) {
       console.error('Error sharing:', error);
-      toast({
-        title: "Share failed",
-        description: "Unable to share. Please try again.",
-        variant: "destructive"
-      });
+      
+      // If share fails, always try clipboard as final fallback
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(window.location.href);
+          toast({
+            title: "Link copied!",
+            description: "Share didn't work, but link copied to clipboard!"
+          });
+        } else {
+          toast({
+            title: "Manual copy needed",
+            description: "Copy this URL to share: " + window.location.href,
+          });
+        }
+      } catch (clipboardError) {
+        toast({
+          title: "Manual copy needed",
+          description: "Copy this URL to share: " + window.location.href,
+        });
+      }
     }
   };
 
@@ -694,8 +783,20 @@ const TemplateEditor = () => {
                   />
 
                   <ElementControls
-                    selectedText={customElements.find(el => el.id === selectedElement && el.type === 'text') as any}
-                    selectedImage={customElements.find(el => el.id === selectedElement && el.type === 'image') as any}
+                    selectedText={selectedElement && customElements.find(el => el.id === selectedElement && el.type === 'text') ? 
+                      { ...customElements.find(el => el.id === selectedElement && el.type === 'text'), 
+                        text: customElements.find(el => el.id === selectedElement && el.type === 'text')?.content || '',
+                        rotation: 0,
+                        scale: 1,
+                        opacity: 100
+                      } as any : undefined}
+                    selectedImage={selectedElement && customElements.find(el => el.id === selectedElement && el.type === 'image') ? 
+                      { ...customElements.find(el => el.id === selectedElement && el.type === 'image'),
+                        src: customElements.find(el => el.id === selectedElement && el.type === 'image')?.content || '',
+                        rotation: 0,
+                        scale: 1,
+                        opacity: 100
+                      } as any : undefined}
                     onRotate={rotateElement}
                     onScaleUp={scaleElementUp}
                     onScaleDown={scaleElementDown}
