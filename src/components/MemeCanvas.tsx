@@ -59,15 +59,15 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               color: headerText.color,
               fontFamily: headerText.fontFamily,
               fontWeight: '900',
-              lineHeight: 1,
+              lineHeight: 1.2,
               opacity: headerText.opacity / 100,
               transform: `rotate(${headerText.rotation}deg) scale(${headerText.scale})`,
               userSelect: 'none',
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '6px',
-              paddingBottom: '6px',
+              paddingTop: '12px',
+              paddingBottom: '8px',
               paddingLeft: '12px',
               paddingRight: '12px',
               marginBottom: '0px'
@@ -158,18 +158,18 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               color: footerText.color,
               fontFamily: footerText.fontFamily,
               fontWeight: '900',
-              lineHeight: 1,
+              lineHeight: 1.2,
               opacity: footerText.opacity / 100,
               transform: `rotate(${footerText.rotation}deg) scale(${footerText.scale})`,
               userSelect: 'none',
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '1px',
-              paddingBottom: '1px',
+              paddingTop: '8px',
+              paddingBottom: '12px',
               paddingLeft: '12px',
               paddingRight: '12px',
-              marginTop: '-1px'
+              marginTop: '0px'
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
