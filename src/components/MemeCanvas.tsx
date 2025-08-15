@@ -53,7 +53,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${headerText.fontSize * 0.4}px`,
               color: headerText.color,
@@ -65,7 +65,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               userSelect: 'none',
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
-              whiteSpace: 'pre',
+              whiteSpace: 'pre-wrap',
               paddingTop: '6px',
               paddingBottom: '6px',
               paddingLeft: '12px',
@@ -165,11 +165,11 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '3px',
-              paddingBottom: '3px',
+              paddingTop: '1px',
+              paddingBottom: '1px',
               paddingLeft: '12px',
               paddingRight: '12px',
-              marginTop: '0px'
+              marginTop: '-1px'
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
