@@ -228,24 +228,29 @@ console.log("Canvas created successfully", canvas.width, canvas.height);
         const containerOffset = containerRect.top - baseTop;
         const footerOffset = includeFooter ? footerText!.getBoundingClientRect().top - baseTop : 0;
 
-        // Draw header text if exists
+        // Draw header text if exists with proper padding
         if (headerText && headerText !== memeContainer && headerText.textContent?.trim()) {
           console.log("Drawing header text:", headerText.textContent);
+          
+          // Create dark background for header
+          const headerRect = headerText.getBoundingClientRect();
+          const headerHeight = headerRect.height;
+          
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(0, headerOffset, targetWidth, headerHeight);
+          
           const computedStyle = window.getComputedStyle(headerText);
           const fontSize = Math.max(parseInt(computedStyle.fontSize) || 32, 16);
           
           ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-          ctx.textAlign = 'center';
+          ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.lineWidth = Math.max(fontSize / 16, 2);
-          ctx.strokeStyle = '#000000';
           ctx.fillStyle = '#FFFFFF';
           
-          const headerRect = headerText.getBoundingClientRect();
-          const x = (headerRect.left - wrapperRect.left) + (headerRect.width / 2);
-          const y = headerOffset + (headerRect.height / 2);
+          // Position text with proper padding (12px top, 8px bottom as per MemeCanvas)
+          const x = 12; // Left padding
+          const y = headerOffset + (headerHeight / 2);
           
-          ctx.strokeText(headerText.textContent, x, y);
           ctx.fillText(headerText.textContent, x, y);
         }
 
@@ -286,24 +291,29 @@ console.log("Canvas created successfully", canvas.width, canvas.height);
           }
         });
 
-        // Draw footer text if exists
+        // Draw footer text if exists with proper padding
         if (footerText && footerText !== memeContainer && footerText.textContent?.trim()) {
           console.log("Drawing footer text:", footerText.textContent);
+          
+          // Create dark background for footer
+          const footerRect = footerText.getBoundingClientRect();
+          const footerHeight = footerRect.height;
+          
+          ctx.fillStyle = '#000000';
+          ctx.fillRect(0, footerOffset, targetWidth, footerHeight);
+          
           const computedStyle = window.getComputedStyle(footerText);
           const fontSize = Math.max(parseInt(computedStyle.fontSize) || 32, 16);
           
           ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-          ctx.textAlign = 'center';
+          ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.lineWidth = Math.max(fontSize / 16, 2);
-          ctx.strokeStyle = '#000000';
           ctx.fillStyle = '#FFFFFF';
           
-          const footerRect = footerText.getBoundingClientRect();
-          const x = (footerRect.left - wrapperRect.left) + (footerRect.width / 2);
-          const y = footerOffset + (footerRect.height / 2);
+          // Position text with proper padding (8px top, 12px bottom as per MemeCanvas)
+          const x = 12; // Left padding
+          const y = footerOffset + (footerHeight / 2);
           
-          ctx.strokeText(footerText.textContent, x, y);
           ctx.fillText(footerText.textContent, x, y);
         }
 
