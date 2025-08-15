@@ -53,7 +53,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${headerText.fontSize * 0.4}px`,
               color: headerText.color,
@@ -66,8 +66,8 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre',
-              paddingTop: '12px',
-              paddingBottom: '12px',
+              paddingTop: '6px',
+              paddingBottom: '6px',
               paddingLeft: '12px',
               paddingRight: '12px',
               marginBottom: '0px'
@@ -152,7 +152,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-t border-border ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center border-t border-border ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${footerText.fontSize * 0.4}px`,
               color: footerText.color,
@@ -165,8 +165,8 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre',
-              paddingTop: '12px',
-              paddingBottom: '12px',
+              paddingTop: '6px',
+              paddingBottom: '6px',
               paddingLeft: '12px',
               paddingRight: '12px',
               marginTop: '0px'
