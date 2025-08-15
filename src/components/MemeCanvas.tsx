@@ -53,24 +53,26 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-black/80 ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${headerText.fontSize * 0.4}px`,
               color: headerText.color,
               fontFamily: headerText.fontFamily,
               fontWeight: '900',
-              lineHeight: 1,
+              lineHeight: 1.2,
               opacity: headerText.opacity / 100,
               transform: `rotate(${headerText.rotation}deg) scale(${headerText.scale})`,
               userSelect: 'none',
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
-              whiteSpace: 'pre',
-              paddingTop: '6px',
-              paddingBottom: '6px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              marginBottom: '0px'
+              whiteSpace: 'pre-wrap',
+              paddingTop: '12px',
+              paddingBottom: '12px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
+              marginBottom: '0px',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), -1px -1px 0px rgba(0, 0, 0, 0.8), 1px -1px 0px rgba(0, 0, 0, 0.8), -1px 1px 0px rgba(0, 0, 0, 0.8), 1px 1px 0px rgba(0, 0, 0, 0.8)',
+              WebkitTextStroke: '1px black'
             }}
             onMouseDown={e => onMouseDown(e, headerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, headerText.id, 'text')}
@@ -152,24 +154,26 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-t border-border ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-black/80 ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${footerText.fontSize * 0.4}px`,
               color: footerText.color,
               fontFamily: footerText.fontFamily,
               fontWeight: '900',
-              lineHeight: 1,
+              lineHeight: 1.2,
               opacity: footerText.opacity / 100,
               transform: `rotate(${footerText.rotation}deg) scale(${footerText.scale})`,
               userSelect: 'none',
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '3px',
-              paddingBottom: '3px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              marginTop: '0px'
+              paddingTop: '12px',
+              paddingBottom: '12px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
+              marginTop: '0px',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8), -1px -1px 0px rgba(0, 0, 0, 0.8), 1px -1px 0px rgba(0, 0, 0, 0.8), -1px 1px 0px rgba(0, 0, 0, 0.8), 1px 1px 0px rgba(0, 0, 0, 0.8)',
+              WebkitTextStroke: '1px black'
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
