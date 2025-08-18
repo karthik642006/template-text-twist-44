@@ -141,7 +141,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
                 zIndex: selectedImageId === field.id ? 10 : 1
               }}
               onMouseDown={e => onMouseDown(e, field.id, 'image')}
-              onTouchStart={e => field.id, 'image')}
+              onTouchStart={e => onTouchStart(e, field.id, 'image')}
             >
               <img src={field.src} alt="Uploaded" className="w-full h-full object-cover" draggable={false} />
             </div>
