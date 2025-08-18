@@ -66,10 +66,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '12px',
-              paddingBottom: '8px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
+              paddingTop: '8px',
+              paddingBottom: '4px',
+              paddingLeft: '8px',
+              paddingRight: '8px',
               marginBottom: '0px'
             }}
             onMouseDown={e => onMouseDown(e, headerText.id, 'text')}
@@ -141,7 +141,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
                 zIndex: selectedImageId === field.id ? 10 : 1
               }}
               onMouseDown={e => onMouseDown(e, field.id, 'image')}
-              onTouchStart={e => onTouchStart(e, field.id, 'image')}
+              onTouchStart={e => field.id, 'image')}
             >
               <img src={field.src} alt="Uploaded" className="w-full h-full object-cover" draggable={false} />
             </div>
@@ -165,10 +165,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '8px',
-              paddingBottom: '12px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
+              paddingTop: '4px',
+              paddingBottom: '8px',
+              paddingLeft: '8px',
+              paddingRight: '8px',
               marginTop: '0px'
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
