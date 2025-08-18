@@ -96,7 +96,7 @@ const DownloadComponent = () => {
 
       console.log("Meme wrapper found:", memeWrapper);
 
-      // Decide capture target: include header/footer only if they exist
+      // Use html2canvas to capture the exact visual appearance
       const { default: html2canvas } = await import('html2canvas');
 
       const headerEl = memeWrapper.querySelector('[data-header-text]') as HTMLElement | null;
@@ -114,9 +114,6 @@ const DownloadComponent = () => {
       });
 
       let canvas;
-      // Temporarily suppress shadows (to avoid extra white margins in output)
-      const prevBoxShadow = (targetElement as HTMLElement).style.boxShadow;
-      (targetElement as HTMLElement).style.boxShadow = 'none';
       try {
         canvas = await html2canvas(targetElement, {
           backgroundColor: '#ffffff',
@@ -133,20 +130,16 @@ const DownloadComponent = () => {
           windowHeight: targetElement.offsetHeight
         });
       } finally {
-        // Restore any hidden placeholders and styles
+        // Restore any hidden placeholders
         hiddenNodes.forEach(({ el, visibility }) => {
           el.style.visibility = visibility;
         });
-        (targetElement as HTMLElement).style.boxShadow = prevBoxShadow;
       }
 
-console.log("Canvas created successfully", canvas.width, canvas.height);
+      console.log("Canvas created successfully", canvas.width, canvas.height);
 
-      const outCanvas = trimCanvas(canvas as HTMLCanvasElement, 8);
-      console.log("Trimmed canvas size", outCanvas.width, outCanvas.height);
-
-      // Convert to blob and download
-      outCanvas.toBlob((blob) => {
+      // Convert to blob and download without trimming to preserve exact spacing
+      canvas.toBlob((blob) => {
         if (blob) {
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
@@ -169,184 +162,11 @@ console.log("Canvas created successfully", canvas.width, canvas.height);
 
     } catch (error) {
       console.error('Download error:', error);
-      
-      // Enhanced fallback method
-      try {
-        console.log("Attempting fallback download method");
-        const memeContainer = document.querySelector('[data-meme-container]') as HTMLElement;
-        if (!memeContainer) throw new Error('No meme container found');
-
-        const memeWrapper = memeContainer.parentElement as HTMLElement;
-        if (!memeWrapper) throw new Error('No meme wrapper found');
-
-        // Get all elements using explicit data attributes
-        const backgroundImg = memeContainer.querySelector('img') as HTMLImageElement;
-        const headerText = memeWrapper.querySelector('[data-header-text]') as HTMLElement | null;
-        const footerText = memeWrapper.querySelector('[data-footer-text]') as HTMLElement | null;
-        const textElements = memeContainer.querySelectorAll('[data-regular-text]');
-        
-        console.log("Found background image:", !!backgroundImg);
-        console.log("Found header text:", !!headerText && headerText !== memeContainer);
-        console.log("Found footer text:", !!footerText && footerText !== memeContainer);
-        console.log("Found text elements:", textElements.length);
-
-        // Create canvas with proper dimensions
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) throw new Error('Could not get canvas context');
-
-        // Wait for image to load if needed
-        if (backgroundImg && !backgroundImg.complete) {
-          await new Promise<void>((resolve, reject) => {
-            backgroundImg.onload = () => resolve();
-            backgroundImg.onerror = () => reject(new Error('Image failed to load'));
-          });
-        }
-
-        // Determine capture area based on whether header/footer have text
-        const wrapperRect = memeWrapper.getBoundingClientRect();
-        const containerRect = memeContainer.getBoundingClientRect();
-
-        const includeHeader = !!(headerText && headerText !== memeContainer && headerText.textContent?.trim());
-        const includeFooter = !!(footerText && footerText !== memeContainer && footerText.textContent?.trim());
-        const captureOnlyImage = !includeHeader && !includeFooter;
-
-        const targetWidth = captureOnlyImage ? containerRect.width : wrapperRect.width;
-        const targetHeight = captureOnlyImage ? containerRect.height : wrapperRect.height;
-
-        canvas.width = Math.max(targetWidth * 2, 400);
-        canvas.height = Math.max(targetHeight * 2, 400);
-        ctx.scale(2, 2);
-
-        // Draw white background
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, targetWidth, targetHeight);
-
-        // Calculate positions relative to the capture area
-        const baseTop = captureOnlyImage ? containerRect.top : wrapperRect.top;
-        const headerOffset = includeHeader ? headerText!.getBoundingClientRect().top - baseTop : 0;
-        const containerOffset = containerRect.top - baseTop;
-        const footerOffset = includeFooter ? footerText!.getBoundingClientRect().top - baseTop : 0;
-
-        // Draw header text if exists with proper padding
-        if (headerText && headerText !== memeContainer && headerText.textContent?.trim()) {
-          console.log("Drawing header text:", headerText.textContent);
-          
-          // Create dark background for header
-          const headerRect = headerText.getBoundingClientRect();
-          const headerHeight = headerRect.height;
-          
-          ctx.fillStyle = '#000000';
-          ctx.fillRect(0, headerOffset, targetWidth, headerHeight);
-          
-          const computedStyle = window.getComputedStyle(headerText);
-          const fontSize = Math.max(parseInt(computedStyle.fontSize) || 32, 16);
-          
-          ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#FFFFFF';
-          
-          // Position text with proper padding (12px top, 8px bottom as per MemeCanvas)
-          const x = 12; // Left padding
-          const y = headerOffset + (headerHeight / 2);
-          
-          ctx.fillText(headerText.textContent, x, y);
-        }
-
-        // Draw background image
-        if (backgroundImg && backgroundImg.complete && backgroundImg.naturalWidth > 0) {
-          console.log("Drawing background image");
-          ctx.drawImage(backgroundImg, 0, containerOffset, containerRect.width, containerRect.height);
-        }
-
-        // Draw regular text elements
-        textElements.forEach((element, index) => {
-          const htmlElement = element as HTMLElement;
-          const text = htmlElement.textContent?.trim() || '';
-          
-          if (text) {
-            console.log(`Drawing text element ${index + 1}:`, text);
-            
-            const computedStyle = window.getComputedStyle(htmlElement);
-            const fontSize = Math.max(parseInt(computedStyle.fontSize) || 32, 16);
-            const elementRect = htmlElement.getBoundingClientRect();
-            
-            const x = (elementRect.left - wrapperRect.left) + (elementRect.width / 2);
-            const y = (elementRect.top - wrapperRect.top) + (elementRect.height / 2);
-            
-            ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.lineWidth = Math.max(fontSize / 16, 2);
-            ctx.strokeStyle = '#000000';
-            ctx.fillStyle = '#FFFFFF';
-            
-            const lines = text.split('\n');
-            lines.forEach((line, lineIndex) => {
-              const lineY = y + (lineIndex - (lines.length - 1) / 2) * fontSize * 1.2;
-              ctx.strokeText(line, x, lineY);
-              ctx.fillText(line, x, lineY);
-            });
-          }
-        });
-
-        // Draw footer text if exists with proper padding
-        if (footerText && footerText !== memeContainer && footerText.textContent?.trim()) {
-          console.log("Drawing footer text:", footerText.textContent);
-          
-          // Create dark background for footer
-          const footerRect = footerText.getBoundingClientRect();
-          const footerHeight = footerRect.height;
-          
-          ctx.fillStyle = '#000000';
-          ctx.fillRect(0, footerOffset, targetWidth, footerHeight);
-          
-          const computedStyle = window.getComputedStyle(footerText);
-          const fontSize = Math.max(parseInt(computedStyle.fontSize) || 32, 16);
-          
-          ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#FFFFFF';
-          
-          // Position text with proper padding (8px top, 12px bottom as per MemeCanvas)
-          const x = 12; // Left padding
-          const y = footerOffset + (footerHeight / 2);
-          
-          ctx.fillText(footerText.textContent, x, y);
-        }
-
-        // Convert to blob and download
-        canvas.toBlob((blob) => {
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `meme-${Date.now()}.png`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            console.log("Fallback download successful");
-            toast({
-              title: "Download successful!",
-              description: "Your meme has been downloaded as PNG."
-            });
-          } else {
-            throw new Error('Failed to create blob from fallback canvas');
-          }
-        }, 'image/png', 1.0);
-
-      } catch (fallbackError) {
-        console.error('Fallback download also failed:', fallbackError);
-        toast({
-          title: "Download failed",
-          description: "Unable to download meme. Please try again.",
-          variant: "destructive"
-        });
-      }
+      toast({
+        title: "Download failed",
+        description: "Unable to download meme. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
