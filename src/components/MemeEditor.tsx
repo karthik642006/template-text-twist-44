@@ -26,13 +26,13 @@ const MemeEditor = () => {
   const [textFields, setTextFields] = useState<TextField[]>([
     {
       id: 1,
-      text: "TOP TEXT",
+      text: "Place your text here",
       x: 50,
-      y: 10,
-      fontSize: 32,
-      color: "#FFFFFF",
+      y: 8,
+      fontSize: 28,
+      color: "#000000",
       fontWeight: "bold",
-      fontFamily: "Impact",
+      fontFamily: "Arial",
       opacity: 100,
       rotation: 0,
       scale: 1,
@@ -40,13 +40,27 @@ const MemeEditor = () => {
     },
     {
       id: 2,
-      text: "BOTTOM TEXT",
+      text: "Meme text goes here",
       x: 50,
-      y: 90,
+      y: 30,
       fontSize: 32,
       color: "#FFFFFF",
       fontWeight: "bold",
       fontFamily: "Impact",
+      opacity: 100,
+      rotation: 0,
+      scale: 1,
+      type: 'text'
+    },
+    {
+      id: 3,
+      text: "Place your text here",
+      x: 50,
+      y: 92,
+      fontSize: 28,
+      color: "#000000",
+      fontWeight: "bold",
+      fontFamily: "Arial",
       opacity: 100,
       rotation: 0,
       scale: 1,
@@ -57,7 +71,7 @@ const MemeEditor = () => {
   const [imageFields, setImageFields] = useState<ImageField[]>([]);
   const [selectedTextId, setSelectedTextId] = useState(0);
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
-  const [templateImage, setTemplateImage] = useState("https://i.imgflip.com/1ur9b0.jpg");
+  const [templateImage, setTemplateImage] = useState("/lovable-uploads/b545e16c-6275-4ed7-85e5-e200400ce2d2.png");
 
   const selectedText = textFields.find(field => field.id === selectedTextId);
   const selectedImage = imageFields.find(field => field.id === selectedImageId);
