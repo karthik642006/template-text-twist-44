@@ -53,7 +53,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-b border-border ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${headerText.fontSize * 0.4}px`,
               color: headerText.color,
@@ -66,11 +66,8 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '8px',
-              paddingBottom: '4px',
-              paddingLeft: '8px',
-              paddingRight: '8px',
-              marginBottom: '0px'
+              padding: '12px 16px',
+              margin: 0
             }}
             onMouseDown={e => onMouseDown(e, headerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, headerText.id, 'text')}
@@ -152,7 +149,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start border-t border-border ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${footerText.fontSize * 0.4}px`,
               color: footerText.color,
@@ -165,11 +162,8 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              paddingTop: '4px',
-              paddingBottom: '8px',
-              paddingLeft: '8px',
-              paddingRight: '8px',
-              marginTop: '0px'
+              padding: '12px 16px',
+              margin: 0
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
