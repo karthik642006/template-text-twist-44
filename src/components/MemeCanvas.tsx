@@ -41,7 +41,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
   const regularTextFields = textFields.filter(field => field.type === 'text');
 
   return (
-    <div className="relative max-w-sm sm:max-w-md w-full">
+    <div className="relative w-full">
       {/* Export Wrapper: includes header, image area, and footer so downloads match preview */}
       <div
         ref={ref}
@@ -66,7 +66,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              padding: '12px 16px',
+              padding: '6px 10px',
               margin: 0
             }}
             onMouseDown={e => onMouseDown(e, headerText.id, 'text')}
@@ -162,7 +162,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              padding: '12px 16px',
+              padding: '6px 10px',
               margin: 0
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
