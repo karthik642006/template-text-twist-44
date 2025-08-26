@@ -41,19 +41,19 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
   const regularTextFields = textFields.filter(field => field.type === 'text');
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" style={{ marginLeft: '8px', marginRight: '8px' }}>
       {/* Export Wrapper: includes header, image area, and footer so downloads match preview */}
       <div
         ref={ref}
         data-meme-container
         className="relative bg-white overflow-hidden select-none"
-        style={{ margin: 0, padding: 0 }}
+        style={{ margin: '8px 0', padding: 0 }}
       >
         {/* Header Text (fixed top bar) */}
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${headerText.fontSize * 0.4}px`,
               color: headerText.color,
@@ -149,7 +149,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full text-left font-bold transition-all duration-300 flex items-center justify-start bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
               fontSize: `${footerText.fontSize * 0.4}px`,
               color: footerText.color,
