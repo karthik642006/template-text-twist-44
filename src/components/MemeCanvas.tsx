@@ -1,6 +1,7 @@
 
 import { forwardRef } from "react";
 import { TextField, ImageField } from "@/types/meme";
+import { CANVAS_CONFIG } from "@/components/meme-editor/MemeEditorCanvas";
 
 interface MemeCanvasProps {
   templateImage: string;
@@ -31,34 +32,35 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
   onTouchMove,
   onTouchEnd
 }, ref) => {
-  const calculateHorizontalPosition = (text: string) => {
-    const leadingSpaces = text.match(/^ */)?.[0].length || 0;
-    return Math.min(leadingSpaces * 5, 50);
-  };
-
   const headerText = textFields.find(field => field.type === 'header');
   const footerText = textFields.find(field => field.type === 'footer');
   const regularTextFields = textFields.filter(field => field.type === 'text');
 
   return (
-    <div className="relative w-full" style={{ marginLeft: '8px', marginRight: '8px' }}>
+    <div className="relative w-full" style={{ 
+      marginLeft: CANVAS_CONFIG.containerMargins.left, 
+      marginRight: CANVAS_CONFIG.containerMargins.right 
+    }}>
       {/* Export Wrapper: includes header, image area, and footer so downloads match preview */}
       <div
         ref={ref}
         data-meme-container
         className="relative bg-white overflow-hidden select-none"
-        style={{ margin: '8px 0', padding: 0 }}
+        style={{ 
+          margin: `${CANVAS_CONFIG.containerMargins.top} 0 ${CANVAS_CONFIG.containerMargins.bottom} 0`, 
+          padding: 0 
+        }}
       >
         {/* Header Text (fixed top bar) */}
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
-              fontSize: `${headerText.fontSize * 0.4}px`,
+              fontSize: `${headerText.fontSize * CANVAS_CONFIG.textArea.header.fontSize}px`,
               color: headerText.color,
               fontFamily: headerText.fontFamily,
-              fontWeight: '900',
+              fontWeight: CANVAS_CONFIG.textArea.header.fontWeight,
               lineHeight: 1.2,
               opacity: headerText.opacity / 100,
               transform: `rotate(${headerText.rotation}deg) scale(${headerText.scale})`,
@@ -66,8 +68,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === headerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              padding: '6px 10px',
-              margin: 0
+              padding: CANVAS_CONFIG.textArea.header.padding,
+              margin: 0,
+              textAlign: CANVAS_CONFIG.textArea.header.textAlign,
+              justifyContent: CANVAS_CONFIG.textArea.header.textAlign
             }}
             onMouseDown={e => onMouseDown(e, headerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, headerText.id, 'text')}
@@ -103,10 +107,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               style={{
                 left: `${field.x}%`,
                 top: `${field.y}%`,
-                fontSize: `${field.fontSize * 0.4}px`,
+                fontSize: `${field.fontSize * CANVAS_CONFIG.textArea.regular.fontSize}px`,
                 color: field.color,
                 fontFamily: field.fontFamily,
-                fontWeight: '900',
+                fontWeight: CANVAS_CONFIG.textArea.regular.fontWeight,
                 opacity: field.opacity / 100,
                 transform: `translate(-50%, -50%) rotate(${field.rotation}deg) scale(${field.scale})`,
                 minWidth: '60px',
@@ -149,12 +153,12 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full text-center font-bold transition-all duration-300 flex items-center justify-center bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
             style={{
-              fontSize: `${footerText.fontSize * 0.4}px`,
+              fontSize: `${footerText.fontSize * CANVAS_CONFIG.textArea.footer.fontSize}px`,
               color: footerText.color,
               fontFamily: footerText.fontFamily,
-              fontWeight: '900',
+              fontWeight: CANVAS_CONFIG.textArea.footer.fontWeight,
               lineHeight: 1.2,
               opacity: footerText.opacity / 100,
               transform: `rotate(${footerText.rotation}deg) scale(${footerText.scale})`,
@@ -162,8 +166,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               touchAction: 'none',
               zIndex: selectedTextId === footerText.id ? 10 : 1,
               whiteSpace: 'pre-wrap',
-              padding: '6px 10px',
-              margin: 0
+              padding: CANVAS_CONFIG.textArea.footer.padding,
+              margin: 0,
+              textAlign: CANVAS_CONFIG.textArea.footer.textAlign,
+              justifyContent: CANVAS_CONFIG.textArea.footer.textAlign
             }}
             onMouseDown={e => onMouseDown(e, footerText.id, 'text')}
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
