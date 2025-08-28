@@ -31,8 +31,8 @@ export const CANVAS_CONFIG = {
   
   // Main canvas container padding - EDIT THESE VALUES
   canvasContainer: {
-    paddingX: '116px',  // ← Edit this for left/right internal padding
-    paddingY: '124px'   // ← Edit this for top/bottom internal padding
+    paddingX: '16px',  // ← Edit this for left/right internal padding
+    paddingY: '24px'   // ← Edit this for top/bottom internal padding
   },
   
   // Text area configuration
