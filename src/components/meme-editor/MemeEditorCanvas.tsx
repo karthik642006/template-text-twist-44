@@ -23,10 +23,10 @@ interface MemeEditorCanvasProps {
 export const CANVAS_CONFIG = {
   // Container padding and margins
   containerMargins: {
-    left: '4px',
-    right: '4px',
+    left: '0px',
+    right: '0px',
     top: '4px',
-    bottom: '4px'
+    bottom: '2px'
   },
   
   // Text area configuration
