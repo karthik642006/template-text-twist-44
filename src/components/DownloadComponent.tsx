@@ -41,7 +41,7 @@ const DownloadComponent = () => {
         const containerRect = memeContainer.getBoundingClientRect();
         
         canvas = await html2canvas(memeContainer, {
-          backgroundColor: '#ffffff',
+          backgroundColor: 'black',
           scale: 2, // High quality
           useCORS: true,
           allowTaint: false,
