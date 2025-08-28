@@ -23,16 +23,16 @@ interface MemeEditorCanvasProps {
 export const CANVAS_CONFIG = {
   // Container padding and margins - EDIT THESE VALUES
   containerMargins: {
-    left: '20px',      // ← Edit this for left side white space
-    right: '20px',     // ← Edit this for right side white space
+    left: '0px',      // ← Edit this for left side white space
+    right: '120px',     // ← Edit this for right side white space
     top: '16px',       // ← Edit this for top padding
     bottom: '16px'     // ← Edit this for bottom padding
   },
   
   // Main canvas container padding - EDIT THESE VALUES
   canvasContainer: {
-    paddingX: '16px',  // ← Edit this for left/right internal padding
-    paddingY: '24px'   // ← Edit this for top/bottom internal padding
+    paddingX: '116px',  // ← Edit this for left/right internal padding
+    paddingY: '124px'   // ← Edit this for top/bottom internal padding
   },
   
   // Text area configuration
