@@ -23,18 +23,18 @@ interface MemeEditorCanvasProps {
 export const CANVAS_CONFIG = {
   // Container padding and margins
   containerMargins: {
-    left: '8px',
-    right: '8px',
-    top: '8px',
-    bottom: '8px'
+    left: '4px',
+    right: '4px',
+    top: '4px',
+    bottom: '4px'
   },
   
   // Text area configuration
   textArea: {
     // Header text styling
     header: {
-      padding: '6px 10px',
-      textAlign: 'center' as const,
+      padding: '3px 5px',
+      textAlign: 'left' as const,
       borderWidth: '2px',
       fontSize: 0.4, // multiplier for fontSize
       fontWeight: '900'
@@ -42,8 +42,8 @@ export const CANVAS_CONFIG = {
     
     // Footer text styling  
     footer: {
-      padding: '6px 10px', 
-      textAlign: 'center' as const,
+      padding: '3px 5px', 
+      textAlign: 'left' as const,
       borderWidth: '2px',
       fontSize: 0.4, // multiplier for fontSize
       fontWeight: '900'
