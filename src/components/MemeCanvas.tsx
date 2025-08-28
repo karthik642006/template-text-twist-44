@@ -55,7 +55,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {headerText && headerText.text && (
           <div
             data-header-text
-            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-b-2 border-black ${selectedTextId === headerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-b-2 border-black`}
             style={{
               fontSize: `${headerText.fontSize * CANVAS_CONFIG.textArea.header.fontSize}px`,
               color: headerText.color,
@@ -77,6 +77,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
             onTouchStart={e => onTouchStart(e, headerText.id, 'text')}
           >
             {headerText.text}
+            {/* Selection ring - will be ignored in download */}
+            {selectedTextId === headerText.id && (
+              <div className="absolute inset-0 ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20 pointer-events-none" data-selection-ring />
+            )}
           </div>
         )}
 
@@ -103,7 +107,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               key={field.id}
               data-regular-text="true"
               data-placeholder={!field.text}
-              className={`absolute cursor-move select-none font-bold text-center px-2 py-1 transition-all duration-300 ${selectedTextId === field.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+              className={`absolute cursor-move select-none font-bold text-center px-2 py-1 transition-all duration-300`}
               style={{
                 left: `${field.x}%`,
                 top: `${field.y}%`,
@@ -123,6 +127,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               onTouchStart={e => onTouchStart(e, field.id, 'text')}
             >
               {field.text || "Place your text here"}
+              {/* Selection ring - will be ignored in download */}
+              {selectedTextId === field.id && (
+                <div className="absolute inset-0 ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20 pointer-events-none" data-selection-ring />
+              )}
             </div>
           ))}
 
@@ -130,7 +138,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
           {imageFields.map(field => (
             <div
               key={field.id}
-              className={`absolute cursor-move transition-all duration-300 ${selectedImageId === field.id ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
+              className={`absolute cursor-move transition-all duration-300`}
               style={{
                 left: `${field.x}%`,
                 top: `${field.y}%`,
@@ -145,6 +153,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
               onTouchStart={e => onTouchStart(e, field.id, 'image')}
             >
               <img src={field.src} alt="Uploaded" className="w-full h-full object-cover" draggable={false} />
+              {/* Selection ring - will be ignored in download */}
+              {selectedImageId === field.id && (
+                <div className="absolute inset-0 ring-2 ring-blue-400 ring-opacity-50 pointer-events-none" data-selection-ring />
+              )}
             </div>
           ))}
         </div>
@@ -153,7 +165,7 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
         {footerText && footerText.text && (
           <div
             data-footer-text
-            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-t-2 border-black ${selectedTextId === footerText.id ? 'ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20' : ''}`}
+            className={`w-full font-bold transition-all duration-300 flex items-center bg-white border-t-2 border-black`}
             style={{
               fontSize: `${footerText.fontSize * CANVAS_CONFIG.textArea.footer.fontSize}px`,
               color: footerText.color,
@@ -175,6 +187,10 @@ const MemeCanvas = forwardRef<HTMLDivElement, MemeCanvasProps>(({
             onTouchStart={e => onTouchStart(e, footerText.id, 'text')}
           >
             {footerText.text}
+            {/* Selection ring - will be ignored in download */}
+            {selectedTextId === footerText.id && (
+              <div className="absolute inset-0 ring-2 ring-blue-400 ring-opacity-50 bg-blue-50 bg-opacity-20 pointer-events-none" data-selection-ring />
+            )}
           </div>
         )}
       </div>

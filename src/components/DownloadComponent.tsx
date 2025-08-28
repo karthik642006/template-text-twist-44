@@ -27,7 +27,7 @@ const DownloadComponent = () => {
       // Use html2canvas to capture the exact visual appearance
       const { default: html2canvas } = await import('html2canvas');
 
-      // Temporarily hide only auto-placeholders from regular text fields
+      // Temporarily hide only placeholder text (empty text fields)
       const hiddenNodes: { el: HTMLElement; visibility: string }[] = [];
       memeContainer.querySelectorAll('[data-placeholder="true"]').forEach((node) => {
         const el = node as HTMLElement;
@@ -37,9 +37,12 @@ const DownloadComponent = () => {
 
       let canvas;
       try {
+        // Get the exact dimensions and position of the container
+        const containerRect = memeContainer.getBoundingClientRect();
+        
         canvas = await html2canvas(memeContainer, {
           backgroundColor: '#ffffff',
-          scale: 2,
+          scale: 2, // High quality
           useCORS: true,
           allowTaint: false,
           foreignObjectRendering: false,
@@ -48,8 +51,17 @@ const DownloadComponent = () => {
           height: memeContainer.offsetHeight,
           scrollX: 0,
           scrollY: 0,
-          windowWidth: memeContainer.offsetWidth,
-          windowHeight: memeContainer.offsetHeight
+          windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
+          x: 0,
+          y: 0,
+          // Capture exactly what's visible
+          ignoreElements: (element) => {
+            // Ignore selection rings and other UI elements
+            return element.classList.contains('ring-2') || 
+                   element.classList.contains('ring-blue-400') ||
+                   element.hasAttribute('data-selection-ring');
+          }
         });
       } finally {
         // Restore any hidden placeholders
@@ -60,7 +72,7 @@ const DownloadComponent = () => {
 
       console.log("Canvas created successfully", canvas.width, canvas.height);
 
-      // Convert to blob and download
+      // Convert to blob and download with higher quality
       canvas.toBlob((blob) => {
         if (blob) {
           const url = URL.createObjectURL(blob);
