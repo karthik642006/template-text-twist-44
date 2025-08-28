@@ -21,12 +21,18 @@ interface MemeEditorCanvasProps {
 
 // Configuration object for easy editing of canvas styling
 export const CANVAS_CONFIG = {
-  // Container padding and margins
+  // Container padding and margins - EDIT THESE VALUES
   containerMargins: {
-    left: '0px',
-    right: '0px',
-    top: '4px',
-    bottom: '2px'
+    left: '20px',      // ← Edit this for left side white space
+    right: '20px',     // ← Edit this for right side white space
+    top: '16px',       // ← Edit this for top padding
+    bottom: '16px'     // ← Edit this for bottom padding
+  },
+  
+  // Main canvas container padding - EDIT THESE VALUES
+  canvasContainer: {
+    paddingX: '16px',  // ← Edit this for left/right internal padding
+    paddingY: '24px'   // ← Edit this for top/bottom internal padding
   },
   
   // Text area configuration
@@ -58,7 +64,7 @@ export const CANVAS_CONFIG = {
   
   // Canvas background and spacing
   canvas: {
-    backgroundColor: 'black',
+    backgroundColor: 'bg-gray-50', // ← Edit this for background color
     minHeight: '40vh'
   }
 };
@@ -80,8 +86,17 @@ const MemeEditorCanvas = forwardRef<HTMLDivElement, MemeEditorCanvasProps>(({
   return (
     <ScrollArea className="h-[calc(100vh-80px)]">
       <div className="min-h-full">
-        {/* Meme Preview Section */}
-        <div className="p-4 sm:p-6 flex items-center justify-center bg-gray-50" style={{ minHeight: CANVAS_CONFIG.canvas.minHeight }}>
+        {/* Meme Preview Section - EDIT PADDING HERE */}
+        <div 
+          className={`flex items-center justify-center ${CANVAS_CONFIG.canvas.backgroundColor}`} 
+          style={{ 
+            minHeight: CANVAS_CONFIG.canvas.minHeight,
+            paddingLeft: CANVAS_CONFIG.canvasContainer.paddingX,
+            paddingRight: CANVAS_CONFIG.canvasContainer.paddingX,
+            paddingTop: CANVAS_CONFIG.canvasContainer.paddingY,
+            paddingBottom: CANVAS_CONFIG.canvasContainer.paddingY
+          }}
+        >
           <div className="w-full max-w-lg">
             <MemeCanvas
               ref={ref}
