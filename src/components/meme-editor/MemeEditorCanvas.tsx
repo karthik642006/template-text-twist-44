@@ -58,8 +58,8 @@ export const CANVAS_CONFIG = {
   
   // Canvas background and spacing
   canvas: {
-    backgroundColor: 'white',
-    minHeight: '50vh'
+    backgroundColor: 'black',
+    minHeight: '40vh'
   }
 };
 
